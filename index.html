@@ -71,7 +71,7 @@
   <div id="player"></div>
 
 <script>
-    // 1. Load the YouTube API framework
+    // 1. Load the YouTube API
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -82,24 +82,37 @@
         player = new YT.Player('player', {
             height: '0',
             width: '0',
-            videoId: 'UjMOTE7rur8', // Pink Pony Club ID
+            videoId: 'UjMOTE7rur8', // Pink Pony Club
             playerVars: {
                 'playsinline': 1,
-                'autoplay': 0
+                'controls': 0,
+                'disablekb': 1
+            },
+            events: {
+                'onReady': onPlayerReady
             }
         });
     }
 
+    function onPlayerReady(event) {
+        // Mute initially to allow "autoplay" to technically start in the background
+        event.target.mute();
+        event.target.playVideo();
+    }
+
     let yesSize = 1;
     let noClicks = 0;
-    const noTexts = ["Are you sure?", "Really??", "Pwease?", "Look at the red one...", "I'm gonna cry...", "Click Yes!"];
+    const noTexts = ["Are you sure?", "Really??", "Pwease?", "Click Yes!"];
 
     function handleNo() {
         noClicks++;
         yesSize += 0.5;
         document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
-        let noScale = Math.max(0.6, 1 - (noClicks * 0.1));
-        document.getElementById('noBtn').style.transform = `scale(${noScale})`;
+        
+        // This is the secret sauce: 
+        // Every time they hit "No", we try to "kick" the player 
+        // to wake it up in a muted state so it's ready for later.
+        if (player && player.playVideo) { player.playVideo(); }
 
         if (noClicks < noTexts.length) {
             document.getElementById('noBtn').innerText = noTexts[noClicks - 1];
@@ -107,12 +120,14 @@
     }
 
     function celebrate() {
-        document.getElementById('question').innerText = "YAY! I'm gonna keep on dancing at the Pink Pony Club! ❤️";
+        document.getElementById('question').innerText = "YAY! Pink Pony Club time! ❤️";
         document.querySelector('.button-container').style.display = "none";
         document.body.style.backgroundColor = "#ff69b4";
 
-        // 2. The critical "Play" command
-        if (player && player.playVideo) {
+        // 2. Unmute and Play!
+        if (player) {
+            player.unMute();
+            player.setVolume(100);
             player.playVideo();
         }
 
@@ -127,10 +142,12 @@
         heart.innerText = '💖';
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.top = Math.random() * 100 + 'vh';
+        heart.style.position = 'fixed';
         heart.style.zIndex = "100";
         document.body.appendChild(heart);
     }
 </script>
+
 
 </body>
 </html>
