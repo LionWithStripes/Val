@@ -41,6 +41,11 @@
 </head>
 <body>
 
+<audio id="valentine-music" preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+    
 <svg width="0" height="0" style="position: absolute;">
   <defs>
     <clipPath id="squircle-path" clipPathUnits="objectBoundingBox">
@@ -119,22 +124,22 @@
         }
     }
 
-    function celebrate() {
-        document.getElementById('question').innerText = "YAY! Pink Pony Club time! ❤️";
-        document.querySelector('.button-container').style.display = "none";
-        document.body.style.backgroundColor = "#ff69b4";
+function celebrate() {
+    document.getElementById('question').innerText = "YAY! Pink Pony Club time! ❤️";
+    document.querySelector('.button-container').style.display = "none";
+    document.body.style.backgroundColor = "#ff69b4";
 
-        // 2. Unmute and Play!
-        if (player) {
-            player.unMute();
-            player.setVolume(100);
-            player.playVideo();
-        }
+    // Play the audio instantly
+    var audio = document.getElementById('valentine-music');
+    audio.play().catch(function(error) {
+        console.log("Browser blocked autoplay, but the click should have unlocked it.");
+    });
 
-        for(let i=0; i<30; i++) {
-            setTimeout(createHeart, i * 100);
-        }
+    for(let i=0; i<30; i++) {
+        setTimeout(createHeart, i * 100);
     }
+}
+
 
     function createHeart() {
         const heart = document.createElement('div');
