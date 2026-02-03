@@ -8,31 +8,52 @@
         body {
             margin: 0; padding: 0; display: flex; flex-direction: column;
             align-items: center; justify-content: center; height: 100vh;
-            background-color: #fff0f5; font-family: sans-serif; text-align: center;
-            overflow: hidden; position: relative;
+            background-color: #fff0f5; font-family: 'Helvetica Neue', sans-serif; 
+            text-align: center; overflow: hidden; position: relative;
+            transition: background-color 1s ease;
         }
 
         .heart { position: absolute; color: rgba(255, 105, 180, 0.3); font-size: 24px; z-index: -1; }
 
-        h1 { color: #d10056; margin-bottom: 30px; padding: 0 20px; transition: 0.3s; }
+        h1 { color: #d10056; margin-bottom: 30px; padding: 0 20px; transition: 0.3s; font-weight: 700; }
 
-        .button-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .button-container { display: flex; flex-direction: column; align-items: center; gap: 25px; }
 
         .btn {
-            padding: 15px 35px; font-size: 1.2rem; font-weight: bold;
-            border: none; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: all 0.2s;
+            padding: 20px 45px; font-size: 1.2rem; font-weight: bold;
+            border: none; cursor: pointer; transition: all 0.2s ease-in-out;
+            display: inline-flex; align-items: center; justify-content: center;
+            clip-path: url(#squircle-path); -webkit-clip-path: url(#squircle-path);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
         }
 
-        .btn-yes { background-color: #ff4d4d; color: white; z-index: 10; }
+        .btn-yes { 
+            background-color: #ff4d4d; color: white; z-index: 10;
+            filter: drop-shadow(0 0 15px rgba(255, 77, 77, 0.4));
+        }
+
         .btn-no { background-color: white; color: #555; }
+        .btn:active { transform: scale(0.9) !important; }
+
+        /* Hide the music player */
+        #music-player { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="heart" style="top:10%; left:10%;">❤️</div>
-    <div class="heart" style="top:20%; left:80%;">💖</div>
-    <div class="heart" style="top:70%; left:15%;">❤️</div>
+    <svg width="0" height="0" style="position: absolute;">
+      <defs>
+        <clipPath id="squircle-path" clipPathUnits="objectBoundingBox">
+          <path d="M .5,0 C .1,0 0,.1 0,.5 0,.9 .1,1 .5,1 .9,1 1,.9 1,.5 1,.1 .9,0 .5,0 Z" />
+        </clipPath>
+      </defs>
+    </svg>
+
+    <iframe id="music-player" width="0" height="0" src="https://www.youtube.com/embed/UjMOTE7rur8?enablejsapi=1" allow="autoplay"></iframe>
+
+    <div class="heart" style="top:15%; left:10%;">❤️</div>
+    <div class="heart" style="top:25%; left:85%;">💖</div>
+    <div class="heart" style="top:75%; left:20%;">❤️</div>
 
     <h1 id="question">Honey, will you be my valentine?</h1>
 
@@ -44,31 +65,44 @@
     <script>
         let yesSize = 1;
         let noClicks = 0;
-        const noTexts = ["Are you sure?", "Really??", "Pwease?", "Don't do this...", "I'm gonna cry...", "Click the red one!"];
+        const noTexts = ["Are you sure?", "Really??", "Pwease?", "Look at the red one...", "I'm gonna cry...", "Click Yes!"];
 
         function handleNo() {
             noClicks++;
-            
-            // 1. Make the Yes button grow
-            yesSize += 0.4;
+            yesSize += 0.5;
             document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
-            
-            // 2. Make the No button smaller
-            let noScale = Math.max(0.5, 1 - (noClicks * 0.1));
+            let noScale = Math.max(0.6, 1 - (noClicks * 0.1));
             document.getElementById('noBtn').style.transform = `scale(${noScale})`;
 
-            // 3. Change the text of the No button
             if (noClicks < noTexts.length) {
                 document.getElementById('noBtn').innerText = noTexts[noClicks - 1];
-            } else {
-                document.getElementById('noBtn').innerText = "Fine, you win... not!";
             }
         }
 
         function celebrate() {
-            document.getElementById('question').innerText = "YAY! See you on the 14th! ❤️";
+            // Change text and background
+            document.getElementById('question').innerText = "YAY! I'm gonna keep on dancing at the Pink Pony Club! ❤️";
             document.querySelector('.button-container').style.display = "none";
-            document.body.style.backgroundColor = "#ffb6c1";
+            document.body.style.backgroundColor = "#ff69b4"; // Bright Pink
+
+            // Play the music by refreshing the iframe src with autoplay=1
+            const player = document.getElementById('music-player');
+            player.src += "&autoplay=1";
+
+            // Spawn lots of hearts
+            for(let i=0; i<30; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = '💖';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 100 + 'vh';
+            heart.style.zIndex = "100";
+            document.body.appendChild(heart);
         }
     </script>
 </body>
