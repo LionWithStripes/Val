@@ -12,34 +12,53 @@
             text-align: center; overflow: hidden; position: relative;
             transition: background-color 1s ease;
         }
+
         .heart { position: absolute; color: rgba(255, 105, 180, 0.3); font-size: 24px; z-index: -1; }
+
         h1 { color: #d10056; margin-bottom: 30px; padding: 0 20px; transition: 0.3s; font-weight: 700; }
+
         .button-container { display: flex; flex-direction: column; align-items: center; gap: 25px; }
-        
+
         .btn {
-            padding: 25px 45px; font-size: 1.2rem; font-weight: bold;
+            padding: 20px 45px; font-size: 1.2rem; font-weight: bold;
             border: none; cursor: pointer; transition: all 0.2s ease-in-out;
             display: inline-flex; align-items: center; justify-content: center;
             clip-path: url(#squircle-path); -webkit-clip-path: url(#squircle-path);
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
         }
-        .btn-yes { background-color: #ff4d4d; color: white; z-index: 10; }
+
+        .btn-yes { 
+            background-color: #ff4d4d; color: white; z-index: 10;
+            filter: drop-shadow(0 0 15px rgba(255, 77, 77, 0.4));
+        }
+
         .btn-no { background-color: white; color: #555; }
+        .btn:active { transform: scale(0.9) !important; }
+
+        /* Hide the music player */
+        #music-player { display: none; }
     </style>
 </head>
 <body>
 
-    <audio id="music">
+<audio id="music">
         <source src="pinkponyclub.mp3.mp3" type="audio/mpeg">
     </audio>
 
-    <svg width="0" height="0" style="position: absolute;">
-      <defs>
-        <clipPath id="squircle-path" clipPathUnits="objectBoundingBox">
-          <path d="M 0.5,0 C 0.15,0 0,0.15 0,0.5 0,0.85 0.15,1 0.5,1 0.85,1 1,0.85 1,0.5 1,0.15 0.85,0 0.5,0 Z" />
-        </clipPath>
-      </defs>
-    </svg>
+    
+<svg width="0" height="0" style="position: absolute;">
+  <defs>
+    <clipPath id="squircle-path" clipPathUnits="objectBoundingBox">
+      <path d="M 0.5,0 
+               C 0.15,0 0,0.15 0,0.5 
+               0,0.85 0.15,1 0.5,1 
+               0.85,1 1,0.85 1,0.5 
+               1,0.15 0.85,0 0.5,0 
+               Z" />
+    </clipPath>
+  </defs>
+</svg>
+
 
     <div class="heart" style="top:15%; left:10%;">❤️</div>
     <div class="heart" style="top:25%; left:85%;">💖</div>
@@ -52,48 +71,68 @@
         <button id="noBtn" class="btn btn-no" onclick="handleNo()">No</button>
     </div>
 
-    <script>
-        let yesSize = 1;
-        let noClicks = 0;
-        const noTexts = ["Are you sure?", "Really??", "Pwease?", "Click Yes!"];
-        const audio = document.getElementById('music');
+  <div id="player"></div>
 
-        function handleNo() {
-            noClicks++;
-            yesSize += 0.5;
-            document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
-            
-            // Try to "preload" the audio on any interaction to bypass mobile blocks
-            audio.play().then(() => { audio.pause(); }).catch(() => {});
+<script>
+    let yesSize = 1;
+    let noClicks = 0;
+    const noTexts = ["Are you sure?", "Really??", "Pwease?", "Click Yes!"];
 
-            if (noClicks < noTexts.length) {
-                document.getElementById('noBtn').innerText = noTexts[noClicks - 1];
-            }
+    function handleNo() {
+        noClicks++;
+        yesSize += 0.5;
+        document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
+        
+        // This is the secret sauce: 
+        // Every time they hit "No", we try to "kick" the player 
+        // to wake it up in a muted state so it's ready for later.
+        if (player && player.playVideo) { player.playVideo(); }
+
+        if (noClicks < noTexts.length) {
+            document.getElementById('noBtn').innerText = noTexts[noClicks - 1];
         }
+    }
 
-        function celebrate() {
-            document.getElementById('question').innerText = "YAY! Pink Pony Club time! ❤️";
-            document.querySelector('.button-container').style.display = "none";
-            document.body.style.backgroundColor = "#ff69b4";
+function celebrate() {
+    document.getElementById('question').innerText = "YAY! Pink Pony Club time! ❤️";
+    document.querySelector('.button-container').style.display = "none";
+    document.body.style.backgroundColor = "#ff69b4";
 
-            // Play the actual song
-            audio.currentTime = 0;
-            audio.play();
+    // Play the audio instantly
+    var audio = document.getElementById('valentine-music');
+    audio.play().catch(function(error) {
+        console.log("Browser blocked autoplay, but the click should have unlocked it.");
+    });
 
-            for(let i=0; i<30; i++) {
-                setTimeout(createHeart, i * 100);
-            }
+    for(let i=0; i<30; i++) {
+        setTimeout(createHeart, i * 100);
+    }
+}
+
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        let heartStyle = Math.floor(Math.random() * 3);
+        switch(heartStyle) {
+            case 0:
+                heart.innerText = '❤️';
+                break;
+            case 1:
+                heart.innerText = '💖';
+                break;
+            case 2:
+                heart.innerText = '💝';
+                break;
         }
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.top = Math.random() * 100 + 'vh';
+        heart.style.position = 'fixed';
+        heart.style.zIndex = "100";
+        document.body.appendChild(heart);
+    }
+</script>
 
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerText = '💖';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.top = Math.random() * 100 + 'vh';
-            heart.style.position = 'fixed';
-            document.body.appendChild(heart);
-        }
-    </script>
+
 </body>
 </html>
