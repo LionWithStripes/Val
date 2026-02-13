@@ -15,7 +15,16 @@
 
         .heart { position: absolute; color: rgba(255, 105, 180, 0.3); font-size: 24px; z-index: -1; }
 
-        h1 { color: #d10056; margin-bottom: 100px; padding: 0 20px; transition: 1s ease; font-weight: 700; z-index: 2; }
+        h1 { color: #d10056; margin-bottom: 100px; padding: 0 20px; transition: 1s ease; font-weight: 700; z-index: 2;
+    /* The Black Glow Effect */
+    /* We layer multiple shadows to make the glow soft but thick */
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000,
+         0px  0px 10px rgba(0,0,0,0.8);
+        }
 
         .celebration-text { color: #fff0f5; }
         
