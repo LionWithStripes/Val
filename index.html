@@ -78,16 +78,17 @@
     let noClicks = 0;
     const noTexts = ["Are you sure?", "Really??", "Pwease?", "Click Yes!"];
 
+    const audio = document.getElementById('music');
+    
     function handleNo() {
         noClicks++;
         yesSize += 0.5;
         document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
-        
-        // This is the secret sauce: 
-        // Every time they hit "No", we try to "kick" the player 
-        // to wake it up in a muted state so it's ready for later.
-        if (player && player.playVideo) { player.playVideo(); }
 
+        audio.play().then(() => {
+            audio.pause();
+        }).catch(() => {});
+        
         if (noClicks < noTexts.length) {
             document.getElementById('noBtn').innerText = noTexts[noClicks - 1];
         }
@@ -99,10 +100,9 @@ function celebrate() {
     document.body.style.backgroundColor = "#ff69b4";
 
     // Play the audio instantly
-    var audio = document.getElementById('valentine-music');
-    audio.play().catch(function(error) {
-        console.log("Browser blocked autoplay, but the click should have unlocked it.");
-    });
+    audio.currentTime = 0;
+    
+    audio.play();
 
     for(let i=0; i<30; i++) {
         setTimeout(createHeart, i * 100);
