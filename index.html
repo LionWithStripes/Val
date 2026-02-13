@@ -17,6 +17,8 @@
 
         h1 { color: #d10056; margin-bottom: 100px; padding: 0 20px; transition: 0.3s; font-weight: 700; z-index: 2; }
 
+        .celebration-text { color: #fff0f5; }
+        
         .button-container { display: flex; flex-direction: column; align-items: center; gap: 40px; }
 
         .btn {
@@ -97,7 +99,7 @@
 
 function celebrate() {
     question.innerText = "YAY! Pink Pony Club time!";
-    question.style.color = "fff0f5";
+    question.classList.add('celebration-text');
     document.querySelector('.button-container').style.display = "none";
     document.body.style.backgroundColor = "#ff69b4";
 
