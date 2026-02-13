@@ -76,12 +76,13 @@
 <script>
     let yesSize = 1;
     let noClicks = 0;
-    const noTexts = ["Are you sure?", "Really??", "Come oooooonnnn", "Pwease?", "Honey...", "Click Yes!"];
+    const noTexts = ["Are you sure?", "Really??", "Why not?!", "Pwease?", "Honey...", "It's not funny anymore", "Click Yes!"];
 
     const audio = document.getElementById('music');
+    const question = document.getElementById('question');
     
     function handleNo() {
-        yesSize += 0.5;
+        yesSize += 0.3;
         document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
 
         audio.play();
@@ -95,7 +96,8 @@
     }
 
 function celebrate() {
-    document.getElementById('question').innerText = "YAY! Pink Pony Club time! ❤️";
+    question.innerText = "YAY! Pink Pony Club time!";
+    question.style.color = "fff0f5";
     document.querySelector('.button-container').style.display = "none";
     document.body.style.backgroundColor = "#ff69b4";
 
@@ -104,7 +106,7 @@ function celebrate() {
     
     audio.play();
 
-    for(let i=0; i<300; i++) {
+    for(let i=0; i<500; i++) {
         setTimeout(createHeart, i * 50);
     }
 }
