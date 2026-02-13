@@ -85,9 +85,9 @@
         yesSize += 0.5;
         document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
 
-        audio.play().then(() => {
-            audio.pause();
-        }).catch(() => {});
+        audio.play()
+        
+        createTimeout(audio.pause, 10);
         
         if (noClicks < noTexts.length) {
             document.getElementById('noBtn').innerText = noTexts[noClicks - 1];
@@ -104,8 +104,8 @@ function celebrate() {
     
     audio.play();
 
-    for(let i=0; i<100; i++) {
-        setTimeout(createHeart, i * 100);
+    for(let i=0; i<300; i++) {
+        setTimeout(createHeart, i * 50);
     }
 }
 
