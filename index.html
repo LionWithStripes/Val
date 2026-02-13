@@ -37,6 +37,25 @@
         .btn-no { background-color: white; color: #555; }
         .btn:active { transform: scale(0.9) !important; }
 
+        .dancing-image {
+            width: 150px; /* Adjust size as needed */
+            height: auto;
+            margin-bottom: 20px;
+            display: none; /* Hidden until "Yes" is clicked */
+            z-index: 2;
+            transform-origin: bottom center;
+            /* 123 BPM is roughly 0.48s per beat. 
+            We use 0.97s for a full left-to-right swing cycle */
+            animation: sway 0.97s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+        
+        @keyframes sway {
+            0% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+            100% { transform: rotate(-15deg); }
+        }
+
         /* Hide the music player */
         #music-player { display: none; }
     </style>
@@ -66,6 +85,9 @@
     <div class="heart" style="top:25%; left:85%;">💖</div>
     <div class="heart" style="top:75%; left:20%;">❤️</div>
 -->
+
+    <img id="danceImg" src="ninaandkai.png" class="dancing-image" alt="Dancing Icon">
+    
     <h1 id="question">Honey, will you be my valentine?</h1>
 
     <div class="button-container">
@@ -107,6 +129,10 @@ function celebrate() {
     audio.currentTime = 0;
     
     audio.play();
+
+    // Show the dancing image
+    const img = document.getElementById('danceImg');
+    img.style.display = "block";
 
     for(let i=0; i<1000; i++) {
         setTimeout(createHeart, i * 50);
