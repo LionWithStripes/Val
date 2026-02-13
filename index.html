@@ -15,7 +15,7 @@
 
         .heart { position: absolute; color: rgba(255, 105, 180, 0.3); font-size: 24px; z-index: -1; }
 
-        h1 { color: #d10056; margin-bottom: 50px; padding: 0 20px; transition: 0.3s; font-weight: 700; z-index: 2; }
+        h1 { color: #d10056; margin-bottom: 150px; padding: 0 20px; transition: 0.3s; font-weight: 700; z-index: 2; }
 
         .button-container { display: flex; flex-direction: column; align-items: center; gap: 25px; }
 
@@ -104,7 +104,7 @@ function celebrate() {
     
     audio.play();
 
-    for(let i=0; i<30; i++) {
+    for(let i=0; i<100; i++) {
         setTimeout(createHeart, i * 100);
     }
 }
@@ -140,7 +140,7 @@ function celebrate() {
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.top = Math.random() * 100 + 'vh';
         heart.style.position = 'fixed';
-        heart.style.zIndex = "100";
+        heart.style.zIndex = "1";
         document.body.appendChild(heart);
     }
 </script>
