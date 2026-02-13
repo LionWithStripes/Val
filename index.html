@@ -17,7 +17,7 @@
 
         h1 { color: #d10056; margin-bottom: 100px; padding: 0 20px; transition: 0.3s; font-weight: 700; z-index: 2; }
 
-        .button-container { display: flex; flex-direction: column; align-items: center; gap: 50px; }
+        .button-container { display: flex; flex-direction: column; align-items: center; gap: 40px; }
 
         .btn {
             padding: 20px 45px; font-size: 1.2rem; font-weight: bold;
@@ -76,22 +76,22 @@
 <script>
     let yesSize = 1;
     let noClicks = 0;
-    const noTexts = ["Are you sure?", "Really??", "Pwease?", "Click Yes!"];
+    const noTexts = ["Are you sure?", "Really??", "Come oooooonnnn", "Pwease?", "Honey...", "Click Yes!"];
 
     const audio = document.getElementById('music');
     
     function handleNo() {
-        noClicks++;
         yesSize += 0.5;
         document.getElementById('yesBtn').style.transform = `scale(${yesSize})`;
 
-        audio.play()
+        audio.play();
         
-        createTimeout(audio.pause, 10);
+        audio.pause();
         
         if (noClicks < noTexts.length) {
-            document.getElementById('noBtn').innerText = noTexts[noClicks - 1];
+            document.getElementById('noBtn').innerText = noTexts[noClicks];
         }
+        noClicks++;
     }
 
 function celebrate() {
